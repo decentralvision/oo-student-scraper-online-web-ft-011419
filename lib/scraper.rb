@@ -36,6 +36,7 @@ class Scraper
   def self.scrape_profile_page(profile_url)
     html = File.read(profile_url)
     profile_page = Nokogiri::HTML(html)
+<<<<<<< HEAD
     profile_name = profile_page.css('h1.profile-name').text.downcase.split(' ')
     blog_regex = /#{profile_name[0]}.?#{profile_name[1]}(.io|.com)/
     scraped_student = {
@@ -51,6 +52,21 @@ class Scraper
         scraped_student.delete(attribute)
       end
     end
+=======
+    def find_social_link(social_string)
+      profile_page.css("div.social-icon-container a").find {|social_link| social_link.attribute("href").value.include?(social_string)}
+    end
+    find_twitter = profile_page.css("div.social-icon-container a").find {|social_link| social_link.attribute("href").value.include?('twitter')}
+    binding.pry
+    scraped_student = {
+      :twitter => find_twitter ? find_twitter.attribute("href").value : 'none',
+      :linkedin => links[1],
+      :github => links[2],
+      :blog => links[3],
+      :profile_quote => profile_page.css("div.profile-quote").text,
+      :bio => profile_page.css("div.description-holder p").text
+    }
+>>>>>>> 72cffd9b53d1143477c1e5266b833bace8b351ba
     scraped_student
   end
 
